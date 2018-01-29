@@ -1,1 +1,0 @@
-# gulp-jade-temp_1.0
