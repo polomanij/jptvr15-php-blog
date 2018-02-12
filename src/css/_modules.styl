@@ -1,0 +1,130 @@
+.header
+	position relative
+	margin-bottom 10px
+	padding 15px 0
+	background main
+	&-row
+		row-flex()
+		display flex
+		flex-wrap wrap
+		margin-right -15px
+		margin-left -15px
+		align-items center
+	&-logo
+		col()
+		size(3)
+		size-sm(12)
+		sm-block({
+			margin-bottom: 10px
+			text-align: center
+		})
+		&-wrap
+			display inline-block
+			text-align center
+			font-size 24px
+			color #999
+			img
+				max-width 200px
+	&-menu
+		col()
+		size(9)
+		size-sm(12)
+		text-align right
+		&-toggle, li a
+			color txt-color
+			font-size 24px
+			&:hover
+				color txt-color-hover
+		&-toggle
+			display none
+			text-align center
+			font-size 26px
+			font-weight bold
+			cursor pointer
+			sm-block({
+				display: block
+			})
+		ul
+			sm-block({
+				display: none
+				position: absolute
+				left: 0
+				width: 100%
+				background: main
+			})
+		li
+			sm-block({
+				display: block
+				margin-right: 0
+				margin-bottom: 5px
+				text-align: center
+			})
+			display inline-block
+			margin-right 15px
+.main
+	&-row
+		row-flex()
+		align-items flex-start
+	&-content
+		col()
+		size(9)
+		size-md(12)
+		padding 20px
+		border-radius 10px
+		background blue-sat5
+		text-align center
+	&-sidebar
+		col()
+		size(3)
+		md(display, none)
+		padding 15px 10px
+		background #808080
+		border-radius 10px
+		text-align center
+		h3
+			margin 15px 0
+			font-size 25px
+			font-weight bold
+			color blue-sat5
+		&-best
+			h3
+				margin-top 0
+		a
+			display block
+			font-size 22px
+			color txt-color
+			&:hover
+				color txt-color-hover
+		&-best
+		&-category
+			a
+				margin-bottom 10px
+		&-banner
+			max-width 100%
+			margin 15px 0
+		&-tags
+			a
+				display inline-block
+				margin-right 12px
+.content
+	&-title
+		font-size 27px
+		color txt-color
+		margin-bottom 15px
+	&-post
+		margin-bottom 30px
+		font-size 20px
+		color bg
+		&-img
+			max-width 500px
+			margin 10px auto
+		&-title
+			font-size 24px
+			font-weight bold
+			color bg
+	&-post-read
+		margin-right 20px
+		&:hover
+			color ds
+	&-post-views
+		margin-top 20px

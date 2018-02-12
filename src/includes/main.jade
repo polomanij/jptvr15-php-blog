@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+html(lang="en")
+head
+	meta(charset="UTF-8")
+	meta(name="viewport" content="width=device-width, initial-scale=1")
+	block title
+	block link
+	link(rel="stylesheet", href="css/style.css")
+body
+	header.header
+		.wrapper
+			.header-row
+				.header-logo
+					.header-logo-wrap
+						a(href="#")
+							h1 Блог ИТ новостей
+							img(src="img/logo.png", alt="logo")
+				menu.header-menu
+					.header-menu-toggle
+						a Меню
+					ul
+						li
+							a(href="index.html") Главная
+						li
+							a(href="author.html") Автор
+						li
+							a(href="#") Посты
+						li
+							a(href="#") Обратная связь
+	main.main
+		.wrapper
+			.main-row
+				section.main-content
+					block content
+				aside.main-sidebar
+					.main-sidebar-best
+						h3 Самые просматриваемые статьи
+						a(href="#") Билл Гейтс купил новый остров
+						a(href="#") Вышел новый айфон 15
+						a(href="#") Яндекс выпустил свой браузер
+						a(href="#") Нейросети шагнули вперед
+						a(href="#") Лучшие языки программировния на 2017 год
+					.main-sidebar-banner
+						a(href="#")
+							img(src="img/banner.jpg", alt="")
+					.main-sidebar-category
+						h3 Категории
+						a(href="#") Железо
+						a(href="#") Программирование
+						a(href="#") Софт
+						a(href="#") Нейросети
+					.main-sidebar-tags
+						h3 Метки
+						a(href="#") Windows
+						a(href="#") Плагины
+						a(href="#") Бил Гейтс
+						a(href="#") 2017
+					.main-sidebar-banner
+						a(href="#")
+							img(src="img/banner.jpg", alt="")
+	block scripts
+		script(src="libs/font-awesome/fontawesome-all.min.js")
+		script(src="libs/jquery/jquery.min.js")
+		script(src="js/common.js")
