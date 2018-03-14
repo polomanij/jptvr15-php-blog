@@ -6,15 +6,52 @@ use yii\base\Model;
 use \yii\web\UploadedFile;
 use Yii;
 
-class ImageUpload extends Model{
+class ImageUpload extends Model
+{
     
     public $image;
     
-    public function imageUpload(UploadedFile $file)
+    public function rules()
     {
-        $file->saveAs(__DIR__ . '/../web/uploads/' . $file->name);
+        return [
+            ['image', 'required'],
+            ['image', 'file', 'extensions' => 'jpg, png']
+        ];
+    }
+
+        public function uploadFile(UploadedFile $file, $currentImage)
+    {
+        $this->image = $file;
         
-        return $file->name;
+        if ($this->validate()) {
+            $this->deleteCurrentImage($currentImage);
+            return $this->saveImage($file);
+        }
     }
     
+    public function deleteCurrentImage($currentImage)
+    {
+        if (is_file($this->getUploadsFolder() . $currentImage)) {
+            unlink($this->getUploadsFolder() . $currentImage);
+        }
+    }
+    
+    private function getUploadsFolder()
+    {
+        return __DIR__ . '/../web/uploads/';
+    }
+    
+    private function generateFileName()
+    {
+        return md5(uniqid($this->image->baseName)) . '.' . $this->image->extension;
+    }
+    
+    private function saveImage($file)
+    {
+        $fileName = $this->generateFileName();
+        
+        $file->saveAs($this->getUploadsFolder() . $fileName);
+
+        return $fileName;
+    }
 }

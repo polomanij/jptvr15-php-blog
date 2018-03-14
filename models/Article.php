@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\ImageUpload;
 
 /**
  * This is the model class for table "article".
@@ -35,7 +36,7 @@ class Article extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'desc', 'text'], 'required'],
+            [['title', 'desc', 'text', 'category_id'], 'required'],
             ['title', 'unique'],
             [['desc', 'text'], 'string'],
             [['title', 'image'], 'string', 'max' => 255],
@@ -75,9 +76,25 @@ class Article extends \yii\db\ActiveRecord
         return $this->hasMany(Comment::className(), ['article_id' => 'id']);
     }
     
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
     public function saveImage($filename)
     {
         $this->image = $filename;
-        $this->save(false);
+        return $this->save(false);
+    }
+    
+    public function deleteImage()
+    {
+        $imageUploadModel = new ImageUpload();
+        $imageUploadModel->deleteCurrentImage($this->image);
+    }
+    
+    public function beforeDelete() {
+        $this->deleteImage();
+        return parent::beforeDelete();
     }
 }
