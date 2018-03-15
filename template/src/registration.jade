@@ -1,1 +1,11 @@
 extends includes/main
+block content
+	h2.content-title Регистрация
+	form.content-login(action="post")
+		label Email:
+			input(type="text" name="mail")
+		label Пароль:
+			input(type="password" name="pass")
+		label Имя:
+			input(type="text" name="mail")
+		input(class="submit-btn" type="submit" value="Отправить")

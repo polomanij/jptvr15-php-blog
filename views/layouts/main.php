@@ -5,13 +5,24 @@
 
 use app\widgets\Alert;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use \app\assets\PublicAssets;
+use app\models\Article;
+use app\models\Category;
+use app\models\Tag;
 
-AppAsset::register($this);
+PublicAssets::register($this);
+
+$popularArticles = Article::find()->limit(5)->all();
+$categories = Category::find()->all();
+$tags = Tag::find()->all();
 ?>
+
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
@@ -25,56 +36,56 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
-<div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
-    ]);
-    NavBar::end();
-    ?>
-
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
-</div>
-
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
-</footer>
-
+    <header class="header">
+        <div class="wrapper">
+            <div class="header-row">
+                <div class="header-logo">
+                    <div class="header-logo-wrap"><a href="#">
+                            <h1>Блог ИТ новостей</h1><img src="<?= Yii::getAlias('@web') . '/public/img/logo.png'?>" alt="logo"/></a></div>
+                </div>
+                <menu class="header-menu">
+                    <div class="header-menu-toggle"><a>Меню</a></div>
+                    <ul>
+                        <li><a href="index">Главная</a></li>
+                        <li><a href="author">Автор</a></li>
+                        <li><a href="login">Вход</a></li>
+                        <li><a href="registration.html">Регистрация</a></li>
+                    </ul>
+                </menu>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <div class="wrapper">
+            <div class="main-row">
+                <section class="main-content">
+                    <?= $content ?>
+                </section>
+                <aside class="main-sidebar">
+                    <div class="main-sidebar-best">
+                        <h3>Самые просматриваемые статьи</h3>
+                        <?php foreach($popularArticles as $article): ?>
+                        <a href="<?= Url::toRoute(['site/single', 'id' => $article->id]) ?>"><?= $article->title ?></a>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="main-sidebar-banner"><a href="#"><img src="<?= Yii::getAlias('@web') . '/public/img/banner.jpg'?>" alt=""/></a></div>
+                    <div class="main-sidebar-category">
+                        <h3>Категории</h3>
+                        <?php foreach($categories as $category): ?>
+                        <a href="#"><?= $category->title ?></a>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="main-sidebar-tags">
+                        <h3>Метки</h3>
+                        <?php foreach($tags as $tag): ?>
+                        <a href="#"><?= $tag->title ?></a>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="main-sidebar-banner"><a href="#"><img src="<?= Yii::getAlias('@web') . '/public/img/banner.jpg'?>" alt=""/></a></div>
+                </aside>
+            </div>
+        </div>
+    </main>
 <?php $this->endBody() ?>
 </body>
 </html>

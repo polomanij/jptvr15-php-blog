@@ -1,0 +1,1 @@
+$(function(){$(".header-menu-toggle").on("click",function(){$(".header-menu ul").slideToggle(300,function(){"none"===$(this).css("display")&&$(this).removeAttr("style")})})});
