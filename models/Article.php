@@ -80,6 +80,17 @@ class Article extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
+    
+    public function getTags()
+    {
+        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])
+            ->viaTable('article_tag', ['article_id' => 'id']);
+    }
+    
+    public static function getArticlesByCategoryId($category_id)
+    {
+        return self::find()->select('*')->from('article')->where(['like', 'category_id', $category_id])->all();
+    }
 
     public function saveImage($filename)
     {
@@ -96,5 +107,12 @@ class Article extends \yii\db\ActiveRecord
     public function beforeDelete() {
         $this->deleteImage();
         return parent::beforeDelete();
+    }
+    
+    public function viewedCount()
+    {
+        $this->viewed += 1;
+        
+        return $this->save(false);
     }
 }

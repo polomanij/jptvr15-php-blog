@@ -46,10 +46,14 @@ $tags = Tag::find()->all();
                 <menu class="header-menu">
                     <div class="header-menu-toggle"><a>Меню</a></div>
                     <ul>
-                        <li><a href="index">Главная</a></li>
-                        <li><a href="author">Автор</a></li>
-                        <li><a href="login">Вход</a></li>
-                        <li><a href="registration.html">Регистрация</a></li>
+                        <li><a href="<?= Url::toRoute(['site/index']) ?>">Главная</a></li>
+                        <li><a href="<?= Url::toRoute(['site/author']) ?>">Автор</a></li>
+                        <?php if (Yii::$app->user->isGuest): ?>
+                            <li><a href="<?= Url::toRoute(['site/login']) ?>">Вход</a></li>
+                            <li><a href="<?= Url::toRoute(['site/signup']) ?>">Регистрация</a></li>
+                        <?php else: ?>
+                            <li><a href="<?= Url::toRoute(['site/logout']) ?>">Выход</a></li>
+                        <?php endif; ?>
                     </ul>
                 </menu>
             </div>
@@ -65,20 +69,20 @@ $tags = Tag::find()->all();
                     <div class="main-sidebar-best">
                         <h3>Самые просматриваемые статьи</h3>
                         <?php foreach($popularArticles as $article): ?>
-                        <a href="<?= Url::toRoute(['site/single', 'id' => $article->id]) ?>"><?= $article->title ?></a>
+                            <a href="<?= Url::toRoute(['site/single', 'id' => $article->id]) ?>"><?= $article->title ?></a>
                         <?php endforeach; ?>
                     </div>
                     <div class="main-sidebar-banner"><a href="#"><img src="<?= Yii::getAlias('@web') . '/public/img/banner.jpg'?>" alt=""/></a></div>
                     <div class="main-sidebar-category">
                         <h3>Категории</h3>
                         <?php foreach($categories as $category): ?>
-                        <a href="#"><?= $category->title ?></a>
+                            <a href="<?= Url::toRoute(['site/index', 'category_id' => $category->id]) ?>"><?= $category->title ?></a>
                         <?php endforeach; ?>
                     </div>
                     <div class="main-sidebar-tags">
                         <h3>Метки</h3>
                         <?php foreach($tags as $tag): ?>
-                        <a href="#"><?= $tag->title ?></a>
+                            <a href="<?= Url::toRoute(['site/index', 'tag_id' => $tag->id]) ?>"><?= $tag->title ?></a>
                         <?php endforeach; ?>
                     </div>
                     <div class="main-sidebar-banner"><a href="#"><img src="<?= Yii::getAlias('@web') . '/public/img/banner.jpg'?>" alt=""/></a></div>

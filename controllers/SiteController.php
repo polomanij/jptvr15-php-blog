@@ -11,6 +11,9 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use \app\models\Article;
 use yii\data\Pagination;
+use app\models\Tag;
+use app\models\SignupForm;
+use \app\models\CommentForm;
 
 class SiteController extends Controller
 {
@@ -34,7 +37,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['get'],
                 ],
             ],
         ];
@@ -61,13 +64,21 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
+    public function actionIndex($category_id = null, $tag_id = null)
     {
         $query = Article::find();
         
         $articleCount = $query->count();
         
-        $articles = $query->orderBy('date')->all();
+        if (!empty($category_id)) {
+            $articles = Article::getArticlesByCategoryId($category_id);
+        } elseif (!empty ($tag_id)) {
+            $tag = new Tag;
+            $tag->id = $tag_id;
+            $articles = $tag->articles;
+        } else {
+            $articles = $query->orderBy('date')->all();
+        }
         
         return $this->render('index', [
             'articles' => $articles,
@@ -109,24 +120,6 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * Displays about page.
      *
      * @return string
@@ -134,12 +127,48 @@ class SiteController extends Controller
     public function actionSingle($id)
     {
         $article = Article::findOne($id);
+        $comments = $article->comments;
+        $commentForm = new CommentForm();
         
-        return $this->render('single', ['article' => $article]);
+        $article->viewedCount();
+        
+        return $this->render('single', [
+            'article' => $article,
+            'comments' => $comments,
+            'commentForm' => $commentForm
+        ]);
     }
     
     public function actionAuthor()
     {
         return $this->render('author');
+    }
+    
+    public function actionSignup()
+    {
+        $model = new SignupForm;
+        
+        if (Yii::$app->request->isPost) {
+            $model->load(Yii::$app->request->post());
+            
+            if ($model->signup()) {
+                return $this->redirect(['site/login']);
+            }
+        }
+        
+        return $this->render('signup', ['model' => $model]);
+    }
+    
+    public function actionComment($id)
+    {
+        $model = new CommentForm();
+        
+        if (Yii::$app->request->isPost) {
+            $model->load(Yii::$app->request->post());
+            
+            if ($model->saveComment($id)) {
+                return $this->redirect(['site/single', 'id' => $id]);
+            }
+        }
     }
 }

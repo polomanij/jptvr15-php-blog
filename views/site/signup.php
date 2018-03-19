@@ -2,16 +2,16 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\models\LoginForm */
+/* @var $model app\models\SignupForm */
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->title = 'Signup';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
-    <h2 class="content-title">Вход</h2>
+    <h2 class="content-title">Регистрация</h2>
 
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',
@@ -23,16 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
         <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Email') ?>
+    
+        <?= $form->field($model, 'name')->textInput()->label('Имя') ?>
 
-        <?= $form->field($model, 'password')->passwordInput()->label('Пароль') ?>
-
-        <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        ]) ?>
+        <?= $form->field($model, 'pass')->passwordInput()->label('Пароль') ?>
 
         <div class="form-group">
             <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                <?= Html::submitButton('Регистрация', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>
         </div>
 

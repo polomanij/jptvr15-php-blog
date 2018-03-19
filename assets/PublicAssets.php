@@ -24,7 +24,7 @@ class PublicAssets extends AssetBundle
     ];
     public $js = [
         "public/js/fontawesome-all.min.js",
-        "public/js/jquery.min.js",
+        //"public/js/jquery.min.js",
         "public/js/common.js"
     ];
     public $depends = [

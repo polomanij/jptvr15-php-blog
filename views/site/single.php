@@ -3,9 +3,12 @@
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'Single';
 $this->params['breadcrumbs'][] = $this->title;
+
+$tags = $article->tags
 ?>
 <h2 class="content-title"><?= $article->title ?></h2>
 <div class="content-post">
@@ -17,30 +20,37 @@ $this->params['breadcrumbs'][] = $this->title;
     <p><?= $article->text ?></p>
     <div class="content-post-info">
         <div class="content-post-category">
-            <p>Категория:</p><a href="#"><?= $article->category->title ?></a>
-        </div>
-        <div class="content-post-tags">
-            <p>Метки:</p><a href="#">Плагины</a><a href="#">Софт</a>
+                <p>Категория:</p><a href="<?= Url::toRoute(['site/index', 'category_id' => $article->category->id]) ?>"><?= $article->category->title ?></a>
+            </div>
+            <div class="content-post-tags">
+                <p>Метки:</p>
+                <?php foreach ($tags as $tag): ?>
+                    <a href="<?= Url::toRoute(['site/index', 'tag_id' => $tag->id]) ?>"><?= $tag->title ?></a>
+                <?php endforeach; ?>
         </div><i class="fas fa-eye"></i><span> <?= $article->viewed ?></span>
     </div>
 </div>
 <div class="comments">
     <h2 class="content-title">Комментарии</h2>
-    <form action="post" class="comments-add">
-        <p>Оставить комментарий:</p>
-        <textarea name="comment" class="comments-new"></textarea>
-        <input type="submit" class="submit-btn"/>
-    </form>
-    <div class="comments-item">
-        <h3 class="comments-item-name">Олег:</h3>
-        <p class="comments-item-text">Очень интересная статья</p>
-    </div>
-    <div class="comments-item">
-        <h3 class="comments-item-name">Олег:</h3>
-        <p class="comments-item-text">Понравилось, спасибо!</p>
-    </div>
-    <div class="comments-item">
-        <h3 class="comments-item-name">Олег:</h3>
-        <p class="comments-item-text">Понравилось, спасибо!</p>
-    </div>
+    <?php if (!Yii::$app->user->isGuest): ?>
+        <?php $form = \yii\widgets\ActiveForm::begin([
+            'action' => ['site/comment', 'id' => $article->id],
+            'options' => ['class' => 'comments-add']
+        ]); ?>
+            <?= $form->field($commentForm, 'comment')->textarea(['class' => 'comments-new'])->label('Оставить комментарий:') ?>
+        <input type="submit" class="submit-btn" value="Оставить комментарий"/>
+        <?php \yii\widgets\ActiveForm::end(); ?>
+    <?php endif; ?>
+    <?php if (!empty($comments)): ?>
+        <?php foreach ($comments as $comment): ?>
+        <?php if (!$comment->blocked): ?>
+            <div class="comments-item">
+                <h3 class="comments-item-name"><?= $comment->user->name ?>:</h3>
+                <p class="comments-item-text"><?= $comment->text ?></p>
+            </div>
+        <?php endif; ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p class="comments-item-text">Пока нет ни одного комментария</p>
+    <?php endif; ?>
 </div>

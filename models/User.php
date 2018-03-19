@@ -15,7 +15,7 @@ use Yii;
  *
  * @property Comment[] $comments
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     /**
      * @inheritdoc
@@ -59,4 +59,42 @@ class User extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Comment::className(), ['user_id' => 'id']);
     }
+    
+    public function create()
+    {
+        return $this->save(false);
+    }
+    
+    public static function findByUserEmail($email)
+    {
+        return User::find()->where(['email' => $email])->one();
+    }
+    
+    public function validatePassword($pass)
+    {
+        return Yii::$app->getSecurity()->validatePassword($pass, $this->pass);
+    }
+
+    public function getAuthKey() {
+        
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function validateAuthKey($authKey) {
+        
+    }
+
+    public static function findIdentity($id) 
+    {
+        return User::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null) {
+        
+    }
+
 }
